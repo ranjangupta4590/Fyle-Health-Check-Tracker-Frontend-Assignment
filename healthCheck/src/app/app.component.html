@@ -1,0 +1,238 @@
+<!-- <main class="flex flex-col">
+  <h1 class="bg-[#fe3367] text-white text-center text-xl p-4 font-semibold">
+    Fyle Health Check Tracker
+  </h1>
+  <div class="p-4">
+    <form (ngSubmit)="addWorkout()" class="flex flex-col items-center space-y-4">
+      <div class="space-x-4">
+        <label for="name">Name:</label>
+        <input type="text" id="name" [(ngModel)]="name" name="name" placeholder="Enter Name here" required
+          class="border-b-2 border-gray-400" />
+      </div>
+
+      <div class="space-x-4">
+        <label for="workoutType">Workout Type:</label>
+        <select id="workoutType" [(ngModel)]="workoutType" name="workoutType" required
+          class="border-b-2 border-gray-400">
+          <option hidden value="">Workout Type</option>
+          <option *ngFor="let type of workoutTypes" [value]="type">{{ type }}</option>
+        </select>
+      </div>
+
+      <div class="space-x-4">
+        <label for="workoutMinutes">Workout Minutes:</label>
+        <input type="number" min="0" id="workoutMinutes" oninput="this.value = Math.abs(this.value)"
+          name="workoutMinutes" [(ngModel)]="workoutMinutes" placeholder="Enter mins" required
+          class="border-b-2 border-gray-400 w-[100px]" />
+      </div>
+
+      <input type="submit" value="Add Workout"
+        class="cursor-pointer border-2 bg-[#fe3367] p-1 rounded-md text-white font-semibold transition-all active:scale-75 hover:bg-white hover:text-[#fe3367]" />
+      <button (click)="resetLocalStorage()"
+        class="border-2 bg-[#fe3367] p-1 rounded-md text-white font-semibold transition-all active:scale-75 hover:bg-white hover:text-[#fe3367]">
+        Reset Storage
+      </button>
+    </form>
+  </div>
+  <hr>
+
+  <div class="p-4 flex flex-col items-center space-y-4">
+    <div class="space-x-4">
+      <label for="name">Search by Name:</label>
+      <input type="text" id="name" [(ngModel)]="nameFilter" (input)="filterUsers()" placeholder="Enter Name here"
+        class="border-b-2 border-gray-400" />
+    </div>
+
+    <div class="space-x-4">
+      <label for="workoutType">Filter by Workout Type:</label>
+      <select id="workoutType" [(ngModel)]="workoutType" (change)="filterUsers()" class="border-b-2 border-gray-400">
+        <option value="">All Types</option>
+        <option *ngFor="let type of workoutTypes" [value]="type">{{ type }}</option>
+      </select>
+    </div>
+
+    <button (click)="clearFilters()"
+      class="border-2 bg-[#fe3367] p-1 rounded-md text-white font-semibold transition-all active:scale-75 hover:bg-white hover:text-[#fe3367]">Clear
+      Filters</button>
+  </div>
+
+  <div class="flex flex-col items-center space-y-4">
+    <table class="table-auto border-black border-separate border-spacing-1 border-2">
+      <caption class="caption-top">Table 1.1: Workout Stats</caption>
+      <thead class="bg-gray-300">
+        <tr>
+          <th>Name</th>
+          <th>Workouts</th>
+          <th>Number of Workouts</th>
+          <th>Total Workout Minutes</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let user of paginatedUsers">
+          <td class="p-1 border-2">{{ user.name }}</td>
+          <td class="p-1 border-2">
+            <ng-container *ngFor="let workout of user.workouts; let last = last">
+              {{ workout.type }}{{ last ? '' : ', ' }}
+            </ng-container>
+          <td class="p-1 border-2">{{ getTotalUserWorkoutMinutes(user) }}</td>
+        </tr>
+      </tbody>
+    </table>
+    <div class="space-x-4">
+      <button (click)="previousPage()"
+        class="border-2 bg-[#fe3367] p-1 rounded-md text-white font-semibold transition-all active:scale-75 hover:bg-white hover:text-[#fe3367]">
+        Go back
+      </button>
+      <span class="border p-1 items-center "> {{ currentPage }}</span>
+      <button (click)="nextPage()"
+        class="border-2 bg-[#fe3367] p-1 rounded-md text-white font-semibold transition-all active:scale-75 hover:bg-white hover:text-[#fe3367]">
+        Next Page
+      </button>
+    </div>
+    
+    <div className="bg-slate-700 absolute bottom-0">
+      <div className="flex p-2 items-center justify-center">
+        <p className="text-white">Developed by Ranjan Gupta</p>
+      </div>
+    </div>
+  </div>
+</main> -->
+
+<main class="flex flex-col min-h-screen">
+  <h1 class="bg-[#fe3367] text-white text-center text-xl p-4 font-semibold">
+    Fyle Health Check Tracker
+  </h1>
+
+  <div class="p-4 flex-grow flex flex-col items-center space-y-4">
+    <form (ngSubmit)="addWorkout()" class="flex flex-col space-y-4 w-full max-w-sm">
+
+      <div class="flex flex-col">
+        <label for="name" class="text-gray-700 text-sm font-semibold mb-1">User Name*</label>
+        <input type="text" id="name" [(ngModel)]="name" name="name" placeholder="Smith" required
+          class="bg-gray-200 text-black rounded-lg p-2 w-full border-none" />
+      </div>
+
+      <div class="flex gap-5 w-full">
+        <div class="flex flex-col w-1/2">
+          <label for="workoutType" class="text-gray-700 text-sm font-semibold mb-1">Workout Type*</label>
+          <select id="workoutType" [(ngModel)]="workoutType" name="workoutType" required
+            class="bg-gray-200 text-black rounded-lg p-2 w-full border-none">
+            <option hidden value="">Select Type</option>
+            <option *ngFor="let type of workoutTypes" [value]="type">{{ type }}</option>
+          </select>
+        </div>
+      
+        <div class="flex flex-col w-1/2">
+          <label for="workoutMinutes" class="text-gray-700 text-sm font-semibold mb-1">Workout Minutes*</label>
+          <input type="number" min="0" id="workoutMinutes" oninput="this.value = Math.abs(this.value)"
+            name="workoutMinutes" [(ngModel)]="workoutMinutes" placeholder="60" required
+            class="bg-gray-200 text-black rounded-lg p-2 w-full border-none" />
+        </div>
+      </div>
+      
+      
+      <input type="submit" value="Add Workout"
+        class="cursor-pointer border-2 border-blue-500 bg-white p-2 rounded-full text-blue-500 font-semibold transition-all hover:bg-blue-500 hover:text-white" />
+
+      <button (click)="resetLocalStorage()"
+        class="border-2 border-red-500 bg-white p-2 rounded-full text-red-500 font-semibold transition-all hover:bg-red-500 hover:text-white">
+        Reset Storage
+      </button>
+
+    </form>
+  </div>
+  <hr>
+
+  <!-- Filter Section -->
+<div class="flex justify-between gap-5 w-full p-4">
+  <!-- Search by Name -->
+  <div class="flex flex-col w-2/3">
+    <label for="name" class="text-gray-700 text-sm font-semibold">Search</label>
+    <input type="text" id="name" [(ngModel)]="nameFilter" (input)="filterUsers()" placeholder="Search"
+      class="bg-gray-200 text-black rounded-lg p-2 w-full border-none" />
+  </div>
+
+  <!-- Filter by Workout Type -->
+  <div class="flex flex-col w-2/3">
+    <label for="workoutType" class="text-gray-700 text-sm font-semibold">Filter by Workout Type</label>
+    <select id="workoutType" [(ngModel)]="workoutType" (change)="filterUsers()"
+      class="bg-gray-200 text-black rounded-lg p-2 w-full border-none">
+      <option value="">All</option>
+      <option *ngFor="let type of workoutTypes" [value]="type">{{ type }}</option>
+    </select>
+  </div>
+  
+  <button (click)="clearFilters()" class="border-2 w-1/4 h-10 mt-5 border-red-500 bg-white p-1 rounded-full text-red-500 font-semibold transition-all hover:bg-red-500 hover:text-white">
+    Clear Filter
+  </button>
+</div>
+
+<!-- Workout Table -->
+<div class="p-4">
+  <table class="table-auto w-full text-center border border-gray-300 rounded-lg shadow-lg">
+    <thead class="bg-gray-300 text-gray-700">
+      <tr>
+        <th class="p-3 border border-gray-400">Name</th>
+        <th class="p-3 border border-gray-400">Workouts</th>
+        <th class="p-3 border border-gray-400">Number of Workouts</th>
+        <th class="p-3 border border-gray-400">Total Workout Minutes</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr *ngFor="let user of paginatedUsers; let i = index" class="border border-gray-300"
+        [class.bg-gray-100]="i % 2 === 0" [class.bg-gray-200]="i % 2 !== 0">
+        <td class="p-3 border border-gray-300">{{ user.name }}</td>
+        <td class="p-3 border border-gray-300">
+          <ng-container *ngFor="let workout of user.workouts; let last = last">
+            {{ workout.type }}{{ last ? '' : ', ' }}
+          </ng-container>
+        </td>
+        <td class="p-3 border border-gray-300">{{ user.workouts.length }}</td>
+        <td class="p-3 border border-gray-300">{{ getTotalUserWorkoutMinutes(user) }}</td>
+      </tr>
+    </tbody>
+  </table>
+</div>
+
+
+<!-- Pagination -->
+<div class="flex items-center justify-center space-x-2 p-4">
+  <!-- Previous Button -->
+  <button (click)="previousPage()" [disabled]="currentPage === 1"
+    class="border-2 p-2 rounded-md text-gray-600 font-semibold transition-all active:scale-75 
+          hover:bg-gray-300 hover:text-black disabled:opacity-50">
+    « Previous
+  </button>
+
+  <!-- Page Numbers -->
+  <span *ngFor="let page of [].constructor(totalPages); let i = index"
+    class="border p-2 cursor-pointer px-3 rounded-md"
+    [class.border-blue-500]="currentPage === i + 1" 
+    (click)="goToPage(i + 1)">
+    {{ i + 1 }}
+  </span>
+
+  <!-- Next Button -->
+  <button (click)="nextPage()" 
+    [disabled]="currentPage === totalPages"
+    class="border-2 p-2 rounded-md text-gray-600 font-semibold transition-all active:scale-75 
+          hover:bg-gray-300 hover:text-black disabled:opacity-50">
+    Next »
+  </button>
+
+  <!-- Items per Page Dropdown -->
+  <div class="ml-4">
+    <label for="itemsPerPage" class="text-gray-600 text-sm font-semibold">Items per page:</label>
+    <select id="itemsPerPage" [(ngModel)]="itemsPerPage" (change)="goToPage(1)"
+      class="border p-1 rounded-md">
+      <option *ngFor="let size of [5, 10, 15]" [value]="size">{{ size }}</option>
+    </select>
+  </div>
+</div>
+
+
+
+  <footer class="bg-slate-700 w-full bottom-0 p-2 flex items-center justify-center">
+    <p class="text-white">Developed by Ranjan Gupta</p>
+  </footer>
+</main>
